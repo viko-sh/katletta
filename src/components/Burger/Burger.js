@@ -1,15 +1,12 @@
 import React from 'react';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
+import classes from './Burger.css';
 
 const burger = (props) =>{
 
-    const burgerStyle = {
-        width:'450px',
-        height: '450px'
-    };
 
     return (
-        <div style={burgerStyle}>
+        <div className={classes.Burger}>
             <BurgerIngredient type="breadTop" />
             <BurgerIngredient type="bacon" />
             <BurgerIngredient type="salad" />

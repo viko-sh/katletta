@@ -1,4 +1,4 @@
-import classes from './BurgerIngredient.css';
+import classes from './BurgerIngredient/BurgerIngredient.css';
 
 export default {
     breadBottom: classes.BreadBottom,
