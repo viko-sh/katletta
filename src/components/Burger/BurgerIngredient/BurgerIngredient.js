@@ -1,41 +1,54 @@
-import React from 'react';
+import React, {Component} from'react';
 import classes from './BurgerIngredient.css';
+import ingredients from './Ingredients';
+import PropTypes from 'prop-types';
 
 
-const burgerIngredient = (props) =>{
-    let ingredient = "bread-bottom";
+class BurgerIngredient extends Component{
 
-    // switch (props.type){
-    //     case ('bread-bottom'):
-    //         ingredient = <div className={classes.BreadBottom}></div>;
-    //         break;
-    //     case ('bread-top'):
-    //         ingredient = (
-    //             <div className={classes.BreadTop}>
-    //                 <div className={classes.Seeds1}></div>
-    //                 <div className={classes.Seeds2}></div>
-    //             </div>
-    //         );
-    //         break;
-    //     case ('meat'):
-    //         ingredient = <div className={classes.Meat}></div>;
-    //         break;
-    //     case ('cheese'):
-    //         ingredient = <div className={classes.Cheese}></div>;
-    //         break;
-    //     case ('salad'):
-    //         ingredient = <div className={classes.Salad}></div>;
-    //         break;
-    //     case ('bacon'):
-    //         ingredient = <div className={classes.Bacon}></div>;
-    //         break;
-    //     default: ingredient= null;
-    // }
-    return (
-        <div className={classes.BreadTop}>123</div>
-    )
+
+    render() {
+
+        let type = this.props.type,
+            ingredientFromList = ingredients[type],
+            ingredient = null;
+
+        //for now, we have two types of data that can represent a ingredient
+        //string - 1 level div, object - 1 div with children as object.items
+
+        //handle type if its a string
+        if (typeof ingredientFromList === 'string') {
+            ingredient = (
+                <div className={ingredientFromList}>&nbsp;</div>
+            )
+        }
+
+        //handle object
+        if (typeof ingredientFromList === 'object') {
+
+            //add items as div elements
+            let items = ingredientFromList.items.map((item, index) => {
+                return (
+                    <div
+                        key={item + '-' + index}
+                        className={item}></div>
+                )
+            });
+
+            ingredient = (
+                <div className={ingredientFromList.class}>
+                    {items}
+                </div>
+            )
+        }
+
+        return ingredient;
+    }
+}
+
+BurgerIngredient.propTypes = {
+    type: PropTypes.string
 };
 
-
-export default burgerIngredient;
+export default BurgerIngredient;
 
