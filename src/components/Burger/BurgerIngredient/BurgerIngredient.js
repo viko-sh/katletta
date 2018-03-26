@@ -13,7 +13,7 @@ class BurgerIngredient extends Component{
             ingredientFromList = ingredients[type],
             ingredient = null;
 
-        //for now, we have two types of data that can represent a ingredient
+        //for now, we have two types of data that can represent an ingredient
         //string - 1 level div, object - 1 div with children as object.items
 
         //handle type if its a string
