@@ -6,10 +6,10 @@ const buildControl = (props) =>
 (
     <div className={classes.BuildControl}>
         <div className={classes.Label}>{props.label}</div>
-        <button onClick={()=>{props.removeHadnler(props.type)}}
+        <button onClick={props.removeHadnler}
                 className={classes.Less}
-                disabled={false}>Less</button>
-        <button onClick={()=>{props.addHandler(props.type)}}
+                disabled={props.disabled}>Less</button>
+        <button onClick={props.addHandler}
                 className={classes.More}>More</button>
     </div>
 );
