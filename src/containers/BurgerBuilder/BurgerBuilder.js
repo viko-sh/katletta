@@ -15,6 +15,9 @@ const INGREDIENT_PRICES = {
 
 const BASE_PRICE = 10;
 
+/**
+ * BurgerBuilder Component
+ */
 class BurgerBuilder extends Component{
 
     state={
@@ -25,9 +28,41 @@ class BurgerBuilder extends Component{
             meat: 0
         },
         totalPrice: BASE_PRICE,
-        purchasable: false
+        purchasable: false,
+        purchasing:false
     };
 
+    /**
+     * Change purchasing State to true
+     * May be triggered by order button
+     *@returns {void}
+     */
+    purchaseHandler = () => {
+        this.setState({purchasing: true});
+    };
+
+    /**
+     * Change purchasing State to false
+     * May be triggered by clicking on backdrop
+     *@returns {void}
+     */
+    purchaseCancelHandler = () => {
+        this.setState({purchasing: false})
+    };
+
+    /**
+     * Continue to purchase
+     * triggered by clicking on continue purchase btn
+     *@returns {void}
+     */
+    purchaseContinueHandler = () => {
+        alert('Soon Enough...');
+    };
+
+    /**
+     *
+     * @param ingredients
+     */
     updatePurchaseState(ingredients){
         const sum = Object.keys(ingredients)
             .reduce((total, n)=>{
@@ -86,6 +121,7 @@ class BurgerBuilder extends Component{
     };
 
 
+
     /**
      * Main render method
      * @returns {JSX}
@@ -102,8 +138,14 @@ class BurgerBuilder extends Component{
 
         return(
             <Aux>
-                <Modal>
-                    <OrderSummery ingredients={this.state.ingredients}/>
+                <Modal show={this.state.purchasing}
+                       modalClosed={this.purchaseCancelHandler}>
+                    <OrderSummery
+                        ingredients={this.state.ingredients}
+                        cancelHandler={this.purchaseCancelHandler}
+                        continueHandler={this.purchaseContinueHandler}
+                        totalPrice={this.state.totalPrice}
+                        />
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
@@ -111,7 +153,8 @@ class BurgerBuilder extends Component{
                                removeHadnler={this.removeIngredientHandler.bind(this)}
                                addHandler={this.addIngredientHandler.bind(this)}
                                disabled={disabledInfo}
-                               purchasable={this.state.purchasable} />
+                               purchasable={this.state.purchasable}
+                               purchaseHandler={this.purchaseHandler}/>
             </Aux>
         );
     }
