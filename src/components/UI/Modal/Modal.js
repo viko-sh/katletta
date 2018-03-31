@@ -15,7 +15,7 @@ class Modal extends Component{
      * @returns {boolean}
      */
     shouldComponentUpdate(nextProps, nextState){
-        return  nextProps.show !== this.props.show;
+        return  nextProps.show !== this.props.show || nextProps.loading !== this.props.loading;
     }
 
 

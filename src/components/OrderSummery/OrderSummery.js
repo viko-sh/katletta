@@ -9,6 +9,11 @@ class OrderSummery extends Component{
         //console.log('OrderSummery componentWillUpdate');
     }
 
+    shouldComponentUpdate(nextPreps){
+        console.log('shouldComponentUpdate: ', nextPreps);
+        return true;
+    }
+
     render(){
         const ingredientsSummary = Object.keys(this.props.ingredients).map((egKey, i)=>{
             return (<li key={egKey +  i}>
