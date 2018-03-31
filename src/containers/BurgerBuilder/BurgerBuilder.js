@@ -164,25 +164,42 @@ class BurgerBuilder extends Component{
         this.updatePurchaseState(ingArr);
     };
 
+    /**
+     * Set Order Summery data depending on ingredients & loading
+     * @returns {JSX} - order summery
+     */
+    orderSummery(){
+        let orderSummery = null;
 
+        if(this.state.ingredients){
+            orderSummery = <OrderSummery
+                ingredients={this.state.ingredients}
+                cancelHandler={this.purchaseCancelHandler}
+                continueHandler={this.purchaseContinueHandler}
+                totalPrice={this.state.totalPrice}/>;
+        }
+
+        if(this.state.loading){
+            orderSummery = <Spinner/>
+        }
+
+        return orderSummery;
+    }
 
     /**
-     * Main render method
-     * @returns {JSX}
+     * Get the Burger object
+     * @returns {JSX} - burger object | error | loader
      */
-    render(){
-        //console.log("render");
+    burger(){
+        let burger = this.state.error ? <p>Ingredients can't be loaded</p> :  <Spinner/>
+
         const disabledInfo = {
             ...this.state.ingredients
         };
 
-        let orderSummery = null;
-
         for(let key in disabledInfo){
             disabledInfo[key] = (disabledInfo[key] <= 0)
         }
-
-        let burger = this.state.error ? <p>Ingredients can't be loaded</p> :  <Spinner/>
 
         if(this.state.ingredients){
             burger = (
@@ -197,29 +214,25 @@ class BurgerBuilder extends Component{
                         purchaseHandler={this.purchaseHandler}/>
                 </Aux>
             );
-
-            orderSummery = <OrderSummery
-                ingredients={this.state.ingredients}
-                cancelHandler={this.purchaseCancelHandler}
-                continueHandler={this.purchaseContinueHandler}
-                totalPrice={this.state.totalPrice}/>;
-
-            if(this.state.loading){
-                orderSummery = <Spinner/>
-            }
-
         }
+        return burger;
+    }
 
-
+    /**
+     * Main render method
+     * @returns {JSX}
+     */
+    render(){
+        //console.log("render");
 
         return(
             <Aux>
                 <Modal show={this.state.purchasing}
                        loading={this.state.loading}
                        modalClosed={this.purchaseCancelHandler}>
-                    {orderSummery}
+                    {this.orderSummery()}
                 </Modal>
-                {burger}
+                {this.burger()}
             </Aux>
         );
     }
