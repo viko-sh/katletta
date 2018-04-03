@@ -16,6 +16,11 @@ const INGREDIENT_PRICES = {
     bacon: 0.7
 };
 
+const END_POINTS = {
+  INGREDIENTS: 'ingredients.json',
+  INGREDIENT_PRICES: 'prices.json'
+};
+
 const BASE_PRICE = 10;
 
 /**
@@ -25,6 +30,7 @@ class BurgerBuilder extends Component{
 
     state={
         ingredients: null,
+        prices: null,
         totalPrice: BASE_PRICE,
         purchasable: false,
         purchasing:false,
@@ -34,12 +40,41 @@ class BurgerBuilder extends Component{
 
 
     componentDidMount(){
-        axios.get('/ingredients.json')
+        axios.get(END_POINTS.INGREDIENTS)
             .then(this.resolveIngredientsInit)
             .catch(error => {
                 this.setState({error: true});
-            })
+            });
+
+        axios.get(END_POINTS.INGREDIENT_PRICES)
+            .then(this.resolveIngredientPrices)
+            .catch(error => {
+                this.setState({error: true});
+            });
+        // axios.all([this.getIngredients(), this.getPrices()])
+        //     .then(axios.spread(function (ingredients, prices) {
+        //         // Both requests are now complete
+        //         console.log(ingredients);
+        //         console.log(prices);
+        //     }));
     }
+
+
+    getIngredients(){
+        return axios.get(END_POINTS.INGREDIENTS);
+    }
+
+    getPrices(){
+        return axios.get(END_POINTS.INGREDIENT_PRICES);
+    }
+
+
+    resolveIngredientPrices = (result) =>{
+        const data = result.data;
+        this.setState(()=>{
+            return {prices: data}
+        });
+    };
 
     /**
      *
@@ -130,7 +165,7 @@ class BurgerBuilder extends Component{
         this.setState((prevState, props)=>{
             return {
                 ingredients: ingArr,
-                totalPrice: this.state.totalPrice +  INGREDIENT_PRICES[type]
+                totalPrice: this.state.totalPrice +  this.state.prices[type]
             }
         });
         this.updatePurchaseState(ingArr);
