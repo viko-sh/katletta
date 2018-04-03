@@ -112,30 +112,36 @@ class BurgerBuilder extends Component{
      *@returns {void}
      */
     purchaseContinueHandler = () => {
-        this.setState({loading: true});
+        // this.setState({loading: true});
+        //
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer:{
+        //         name: 'Vico Shlapkin',
+        //         address: {
+        //             street: '31 Eve Street, Strathfield',
+        //             zipCode: 2135,
+        //             country:'Australia'
+        //         },
+        //         email: 'viktor.wrk@gmail.com',
+        //         deliveryMethod: 'fastest'
+        //     }
+        // };
+        //
+        // axios.post('/orders.json',order)
+        //     .then(response=>{
+        //         this.setState({loading:false, purchasing: false})
+        //     })
+        //     .catch(error=>{
+        //         this.setState({loading:false, purchasing: false})
+        //     })
+        const params = Object.keys(this.state.ingredients).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(this.state.ingredients[k])}`).join('&');
 
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer:{
-                name: 'Vico Shlapkin',
-                address: {
-                    street: '31 Eve Street, Strathfield',
-                    zipCode: 2135,
-                    country:'Australia'
-                },
-                email: 'viktor.wrk@gmail.com',
-                deliveryMethod: 'fastest'
-            }
-        };
-
-        axios.post('/orders.json',order)
-            .then(response=>{
-                this.setState({loading:false, purchasing: false})
-            })
-            .catch(error=>{
-                this.setState({loading:false, purchasing: false})
-            })
+        this.props.history.push({
+            pathname: '/checkout',
+            search: params
+        });
     };
 
     /**
