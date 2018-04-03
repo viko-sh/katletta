@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 
 import CheckoutSummery from '../../components/CheckoutSummery/CheckoutSummery';
+import {Route} from 'react-router-dom';
+import ContactData from '../Checkout/ContactData/ContactData';
 
 class Checkout extends Component {
 
@@ -26,7 +28,6 @@ class Checkout extends Component {
     }
 
     onCheckoutCancel = () =>{
-        console.log(this.props);
         this.props.history.goBack();
     };
 
@@ -37,15 +38,16 @@ class Checkout extends Component {
 
 
     render() {
-
-        console.log(this.state.ingredients);
+        //console.log(this.state.ingredients);
+        console.log(this.props.match.path);
+        //console.log(ContactData);
         return (
             <div>
                 <CheckoutSummery
                     ingredients={this.state.ingredients}
                     onCheckoutCancel={this.onCheckoutCancel}
-                    onCheckoutSuccess={this.onCheckoutSuccess}
-                    />
+                    onCheckoutSuccess={this.onCheckoutSuccess}/>
+                <Route path={this.props.match.path + '/contact-data'} component={ContactData}/>
             </div>
         );
     }
