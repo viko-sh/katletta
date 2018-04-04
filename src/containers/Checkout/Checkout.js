@@ -12,6 +12,7 @@ class Checkout extends Component {
         this.state ={
             ingredients: {}
         };
+
     }
 
     componentDidMount(){
@@ -19,7 +20,9 @@ class Checkout extends Component {
         const ingredients = {};
 
         for(let param of query.entries()){
-            ingredients[param[0]] = +param[1];
+            if(param[0]!=='totalPrice'){
+                ingredients[param[0]] = +param[1];
+            }
         }
 
         this.setState({
@@ -38,8 +41,7 @@ class Checkout extends Component {
 
 
     render() {
-        //console.log(this.state.ingredients);
-        console.log(this.props.match.path);
+        //console.log(this.props.match.path);
         //console.log(ContactData);
         return (
             <div>
@@ -47,7 +49,9 @@ class Checkout extends Component {
                     ingredients={this.state.ingredients}
                     onCheckoutCancel={this.onCheckoutCancel}
                     onCheckoutSuccess={this.onCheckoutSuccess}/>
-                <Route path={this.props.match.path + '/contact-data'} component={ContactData}/>
+                <Route
+                    path={this.props.match.path + '/contact-data'}
+                    render={()=> (<ContactData ingredients={this.state.ingredients} />) }/>
             </div>
         );
     }

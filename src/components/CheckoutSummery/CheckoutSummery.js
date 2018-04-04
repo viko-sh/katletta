@@ -15,7 +15,7 @@ const checkoutSummery = (props)=>{
 
     return (
         <div className={classes.CheckoutSummery}>
-            <h1>We hope it tasted well!</h1>
+            <h1>Bone Appetit!</h1>
             <div style={style}>
                 <Burger ingredients={props.ingredients} />
             </div>
