@@ -6,19 +6,56 @@ import Constans from '../../../constans/server';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Aux from '../../../hoc/Util/Util';
 
+import Input from '../../../components/UI/Input/Input';
+
 class ContactData extends Component {
 
     state = {
         prices: {},
         loading: false,
-        name: '',
-        address: {
-            street: '',
-            zipCode: null,
-            country:''
+        orderForm:{
+            name: {
+                elem: 'input',
+                config:{
+                    type: 'text',
+                    label: 'Your name',
+                    value: ''
+                },
+                validation: {
+                    required: true
+                },
+                isValid: true,
+                touched: false
+            },
+            email: {
+                elem: 'input',
+                config:{
+                    type: 'text',
+                    label: 'Your email',
+                    value: ''
+                },
+                validation: {
+                    required: true
+                },
+                isValid: true,
+                touched: false
+            },
+            address: {
+                elem: 'input',
+                config:{
+                    type: 'text',
+                    label: 'Your address',
+                    value: ''
+                },
+                validation: {
+                    required: true
+                },
+                isValid: true,
+                touched: false
+            }
         },
-        email: '',
-        deliveryMethod: 'fastest'
+        deliveryMethod: 'fastest',
+        formIsValid: false
     };
 
     componentDidMount(){
@@ -27,6 +64,16 @@ class ContactData extends Component {
             .catch(error => {
                 this.setState({error: true});
             });
+    }
+
+    checkValidity(value, rules){
+        let isValid = false;
+
+        if(rules.required){
+            isValid = value.trim() !== '';
+        }
+
+        return isValid;
     }
 
     resolveIngredientPrices = (result) =>{
@@ -40,17 +87,14 @@ class ContactData extends Component {
         event.preventDefault();
         this.setState({loading: true});
 
+
         const order = {
             ingredients: this.props.ingredients,
             price: this.state.totalPrice,
             customer:{
-                name: 'Vico Shlapkin',
-                address: {
-                    street: '31 Eve Street, Strathfield',
-                    zipCode: 2135,
-                    country:'Australia'
-                },
-                email: 'viktor.wrk@gmail.com',
+                name: this.state.orderForm.name.config.value,
+                address: this.state.orderForm.address.config.value,
+                email: this.state.orderForm.email.config.value,
                 deliveryMethod: 'fastest'
             }
         };
@@ -64,20 +108,61 @@ class ContactData extends Component {
             })
     };
 
+    inputChangedHandler = (event, input) =>{
+        const updatedOrderForm = {
+            ...this.state.orderForm
+        };
+
+        const updatedOrderFormElement = {
+            ...updatedOrderForm[input]
+        };
+
+        updatedOrderFormElement.config.value = event.target.value;
+        updatedOrderFormElement.valid = this.checkValidity(event.target.value, updatedOrderFormElement.validation);
+
+        updatedOrderFormElement.touched = true;
+
+        updatedOrderForm[input] = updatedOrderFormElement;
+
+
+        let isFormValid = true;
+
+        for(let input in updatedOrderForm){
+            isFormValid = updatedOrderForm[input].valid && isFormValid;
+        }
+
+        console.log(isFormValid);
+        this.setState({orderForm: updatedOrderForm,formIsValid:!isFormValid});
+    };
+
     render() {
 
         let data = <Spinner/>;
+
+        const form = Object.keys(this.state.orderForm).map((input, i)=>{
+            let elem = this.state.orderForm[input];
+           return <Input
+                    key={i}
+                    name={input}
+                    value={elem.config.value}
+                    label={elem.config.label}
+                    type={elem.config.type}
+                    invalid={elem.valid}
+                    touched={elem.touched}
+                    changed={(event) => this.inputChangedHandler(event, input)}/>
+        }, this);
 
         if(!this.state.loading){
             data = (
                 <div className={classes.ContactData}>
                     <h4>Enter your Contact Data</h4>
                     <form>
-                        <input type="text" name="name" placeholder="your name" />
-                        <input type="email" name="email" placeholder="your email" />
-                        <input type="text" name="street" placeholder="street" />
-                        <input type="text" name="postal" placeholder="postal" />
-                        <Button btnType="Success" clicked={this.onSendHandler}>ORDER</Button>
+                        {form}
+                        {/*<Input type="text" name="name" label="your name" />*/}
+                        {/*<Input type="email" name="email" label="your email" />*/}
+                        {/*<Input type="text" name="street" label="street" />*/}
+                        {/*<Input type="text" name="postal" label="postal" />*/}
+                        <Button btnType="Success" disabled={this.state.formIsValid} clicked={this.onSendHandler}>ORDER</Button>
                     </form>
                 </div>
             );
