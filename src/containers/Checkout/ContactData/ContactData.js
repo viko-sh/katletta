@@ -8,6 +8,9 @@ import Aux from '../../../hoc/Util/Util';
 
 import Input from '../../../components/UI/Input/Input';
 
+import {connect} from 'react-redux';
+
+
 class ContactData extends Component {
 
     state = {
@@ -90,7 +93,7 @@ class ContactData extends Component {
 
         const order = {
             ingredients: this.props.ingredients,
-            price: this.state.totalPrice,
+            price: this.props.totalPrice,
             customer:{
                 name: this.state.orderForm.name.config.value,
                 address: this.state.orderForm.address.config.value,
@@ -158,10 +161,6 @@ class ContactData extends Component {
                     <h4>Enter your Contact Data</h4>
                     <form>
                         {form}
-                        {/*<Input type="text" name="name" label="your name" />*/}
-                        {/*<Input type="email" name="email" label="your email" />*/}
-                        {/*<Input type="text" name="street" label="street" />*/}
-                        {/*<Input type="text" name="postal" label="postal" />*/}
                         <Button btnType="Success" disabled={this.state.formIsValid} clicked={this.onSendHandler}>ORDER</Button>
                     </form>
                 </div>
@@ -172,5 +171,11 @@ class ContactData extends Component {
     }
 }
 
+const mapStateToProps = state =>{
+    return {
+        ingredients: state.ingredients,
+        totalPrice: state.totalPrice
+    }
+};
 
-export default ContactData;
+export default connect(mapStateToProps)(ContactData);
