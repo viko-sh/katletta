@@ -4,12 +4,42 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter} from 'react-router-dom';
+
+//redux
 import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import {createStore, applyMiddleware, compose} from 'redux';
 import reducer from './store/reducer';
 
-const store = createStore(reducer);
 
+//middleware
+const logger = store => {
+    return next =>{
+        return action =>{
+            console.log('[Middleware]: Dispatching', action);
+            const result = next(action);
+
+            console.log('[Middleware] next state', store.getState());
+            return result;
+        }
+    }
+};
+
+const adminLogger = store => {
+    return next =>{
+        return action =>{
+            console.log('[ADMIN Middleware]: Dispatching', action);
+            const result = next(action);
+
+            console.log('[ADMIN Middleware] next state', store.getState());
+            return result;
+        }
+    }
+};
+
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(reducer, composeEnhancers(applyMiddleware(logger, adminLogger)));
 
 
 const app = (
