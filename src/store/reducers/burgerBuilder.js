@@ -13,21 +13,24 @@ const INGREDIENT_PRICES = {
     bacon: 0.7
 };
 
+const addIngredient = (state, action) => {
+    return {
+        //copy state
+        ...state,
+        //hover write the data
+        ingredients: {
+            //copy state ingredients
+            ...state.ingredients,
+            [action.ingredientName]: state.ingredients[action.ingredientName] + 1
+        },
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
+    }
+};
 
 const reducer = (state = initialState, action) =>{
     switch(action.type){
         case ACTIONS_TYPES.ADD_INGREDIENT:
-            return {
-                //copy state
-                ...state,
-                //hover write the data
-                ingredients: {
-                    //copy state ingredients
-                    ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] + 1
-                },
-                totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
-            };
+            return addIngredient(state, action);
         case ACTIONS_TYPES.REMOVE_INGREDIENT:
             return {
                 ...state,
@@ -48,8 +51,8 @@ const reducer = (state = initialState, action) =>{
                     bacon: action.ingredients.bacon,
                     cheese: action.ingredients.cheese,
                     meat: action.ingredients.meat
-
                 },
+                totalPrice: 4,
                 error: false
             };
         case ACTIONS_TYPES.FETCH_INGREDIENTS_FAILED:

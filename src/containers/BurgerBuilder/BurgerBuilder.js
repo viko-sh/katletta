@@ -12,6 +12,7 @@ import * as actions from '../../store/actions/index';
 import {connect} from 'react-redux';
 
 
+
 const END_POINTS = {
   INGREDIENTS: 'ingredients.json',
   INGREDIENT_PRICES: 'prices.json'
@@ -31,6 +32,7 @@ class BurgerBuilder extends Component{
 
     componentDidMount(){
         this.props.onInitIngredients();
+
         // axios.get(END_POINTS.INGREDIENT_PRICES)
         //     .then(this.resolveIngredientPrices)
         //     .catch(error => {
@@ -96,6 +98,8 @@ class BurgerBuilder extends Component{
      *@returns {void}
      */
     purchaseContinueHandler = () => {
+        this.props.onInitPurchased();
+
         this.props.history.push('/checkout');
     };
 
@@ -189,9 +193,9 @@ class BurgerBuilder extends Component{
 
 const mapStateToProps = state =>{
     return {
-        ingredients: state.ingredients,
-        totalPrice: state.totalPrice,
-        error: state.error
+        ingredients: state.burgerBuilder.ingredients,
+        totalPrice: state.burgerBuilder.totalPrice,
+        error: state.burgerBuilder.error
     }
 };
 
@@ -199,7 +203,8 @@ const mapDispatchToProps = dispatch =>{
     return {
         onIngredientAdded: (ingredientName) => dispatch(actions.addIngredient(ingredientName) ),
         onIngredientRemove: (ingredientName) => dispatch(actions.removeIngredient(ingredientName) ),
-        onInitIngredients: () => dispatch(actions.initIngredients())
+        onInitIngredients: () => dispatch(actions.initIngredients()),
+        onInitPurchased: () => dispatch(actions.purchaseInit()),
     }
 };
 

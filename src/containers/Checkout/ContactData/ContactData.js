@@ -9,11 +9,14 @@ import Aux from '../../../hoc/Util/Util';
 import Input from '../../../components/UI/Input/Input';
 
 import { connect } from 'react-redux';
+import {purchaseBurger} from '../../../store/actions/index';
+
+
+
 
 class ContactData extends Component {
 	state = {
 		prices: {},
-		loading: false,
 		orderForm: {
 			name: {
 				elem: 'input',
@@ -87,9 +90,8 @@ class ContactData extends Component {
 
 	onSendHandler = event => {
 		event.preventDefault();
-		this.setState({ loading: true });
 
-		const order = {
+        this.props.purchaseBurger({
 			ingredients: this.props.ingredients,
 			price: this.props.totalPrice,
 			customer: {
@@ -98,16 +100,8 @@ class ContactData extends Component {
 				email: this.state.orderForm.email.config.value,
 				deliveryMethod: 'fastest',
 			},
-		};
+		});
 
-		axios
-			.post(Constans.ORDERS, order)
-			.then(response => {
-				this.setState({ loading: false });
-			})
-			.catch(error => {
-				this.setState({ loading: false });
-			});
 	};
 
 	inputChangedHandler = (event, input) => {
@@ -135,7 +129,6 @@ class ContactData extends Component {
 			isFormValid = updatedOrderForm[input].valid && isFormValid;
 		}
 
-		console.log(isFormValid);
 		this.setState({
 			orderForm: updatedOrderForm,
 			formIsValid: !isFormValid,
@@ -161,7 +154,7 @@ class ContactData extends Component {
 			);
 		}, this);
 
-		if (!this.state.loading) {
+		if (!this.props.loading) {
 			data = (
 				<div className={classes.ContactData}>
 					<h4>Enter your Contact Data</h4>
@@ -185,9 +178,18 @@ class ContactData extends Component {
 
 const mapStateToProps = state => {
 	return {
-		ingredients: state.ingredients,
-		totalPrice: state.totalPrice,
+		ingredients: state.burgerBuilder.ingredients,
+		totalPrice: state.burgerBuilder.totalPrice,
+		loading: state.orders.loading
 	};
 };
 
-export default connect(mapStateToProps)(ContactData);
+
+const mapDispatchToProps = dispatch =>{
+    return {
+        purchaseBurger: (orderData) => dispatch(purchaseBurger(orderData) ),
+    }
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactData);

@@ -5,8 +5,6 @@ import {withRouter} from 'react-router-dom';
 
 const burger = (props) =>{
 
-    //prep the dynamic ingredients
-    //to
     let transformedIngredients = Object
         .keys(props.ingredients)
         .map(igKey => {

@@ -24,7 +24,7 @@ const checkoutSummery = (props)=>{
                 clicked={props.onCheckoutCancel}>CANCEL</Button>
             <Button
                 btnType="Success"
-                clicked={props.onCheckoutSuccess}>SUCCESS</Button>
+                clicked={props.onCheckoutSuccess}>PROCEED</Button>
         </div>
     );
 };
