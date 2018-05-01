@@ -46,10 +46,14 @@ const reducer = (state = initialState, action) => {
                 loading: true
             };
 		case ACTIONS_TYPES.ORDERS_INIT:
+			let orders = [];
+			if(action.ordersData){
+                orders = Object.entries(action.ordersData);
+			}
 
 			return {
 				...state,
-				orders: Object.entries(action.ordersData),
+				orders: orders,
 				loading: false,
 				error: false,
 			};

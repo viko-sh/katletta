@@ -19,9 +19,6 @@ const rootReducer = combineReducers({
 	orders: ordersReducer
 });
 
-
-
-
 //middleware
 const logger = store => {
 	return next => {

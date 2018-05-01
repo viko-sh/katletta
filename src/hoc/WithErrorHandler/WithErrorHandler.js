@@ -57,8 +57,6 @@ const withErrorHandler = (WrappedComponent, axios)=>{
                 </Aux>
             );
         }
-
-
     }
 };
 

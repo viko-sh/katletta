@@ -3,6 +3,7 @@ import Order from '../../components/Order/Order';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
+import Note from '../../components/Note/Note';
 
 import * as actions from '../../store/actions/index';
 import { connect } from 'react-redux';
@@ -12,16 +13,23 @@ class Orders extends Component {
 		this.props.onOrdersInit();
 	}
 
+	mapOrders = () =>{
+		return this.props.orders.map((order) => {
+            return <Order key={order[0]} order={order[1]} />;
+        }, this);
+	};
+
 	render() {
 
-		let orders = <Spinner />;
-		if (!this.props.loading) {
-			orders = this.props.orders.map((order) => {
-				return <Order key={order[0]} order={order[1]} />;
-			}, this);
+		if(this.props.loading){
+			return <Spinner />;
 		}
 
-		return <div>{orders}</div>;
+		if(!this.props.orders.length){
+			return <Note message="There is not orders"/>
+		}
+
+        return <div>{this.mapOrders()}</div>;
 	}
 }
 
